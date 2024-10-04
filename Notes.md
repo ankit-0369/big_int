@@ -34,4 +34,12 @@
         │
         └── .gitignore                      # Git ignore file for unnecessary files
 
-```
+
+
+
+# starting with project
+
+* For implementing a library in c++, we need to start with implementing a .h header file. it will include all the function declarations, dependencies which are required throughout the project.
+
+* We need to implement the class Bigint. basically it will handle input number of any arbitrary size. So, I am expected to declare a class which under the hood uses string to hold the given input. and need to perform all the necessary string manipulations which can result us with the general operations which can be performed with a regular sized int.
+
