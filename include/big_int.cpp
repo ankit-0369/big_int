@@ -4,7 +4,6 @@
 #include<sstream>
 #include<iomanip>
 
-
 //helper function to handle the floating_point values
 template <typename T>
 std::string convert_floating_point(T num) {
@@ -108,6 +107,13 @@ bool Big_int::is_valid_number(const std::string& input) {
 }
 
 
+// Overload the << operator for output
+std::ostream& operator<<(std::ostream& stream, const Big_int& n) {
+    stream << n.num;  // Output the string representation of the number
+    return stream;
+}
+
+
 // Overloaded >> operator for Big_int
 std::istream& operator>>(std::istream& stream, Big_int& n) {
     std::string input;
@@ -122,4 +128,86 @@ std::istream& operator>>(std::istream& stream, Big_int& n) {
     }
 
     return stream;
+}
+
+// Friend function for prefix increment (++n)
+Big_int& operator++(Big_int& n) {
+    int carry=1;  // Start with carry = 1 (because we are adding 1)
+    if(n.num[0]=='-'){
+        n.num.erase(0, 1);
+        --n;
+      if(n.num.size()==1 && n.num[0]=='0')return n;
+        n.num='-' + n.num;
+        return n;
+    }
+
+      
+    
+    for(int i=n.num.size()-1;i>=0;--i){
+        int digit = n.num[i] - '0';
+        int sum =digit + carry;
+        n.num[i]=(sum%10)+'0';
+        carry=sum/10;
+    }
+    if(carry==1)n.num='1'+ n.num;
+
+
+    return n;
+
+
+}
+
+Big_int& operator--(Big_int& n) {
+    int borrow=1;  // Start with carry = 1 (because we are adding 1)
+    if(n.num[0]=='-'){
+        n.num.erase(0, 1);
+        ++n;
+        if(n.num.size()==1 && n.num[0]=='0')return n;
+       n.num='-' + n.num;
+        return n;
+    }
+    
+    if(n.num.size()==1 && n.num[0]=='0'){
+        n.num = "-1";
+        return n;
+    }
+    // Start from the last digit and process the string from right to left
+    for (int i = n.num.size() - 1; i >= 0; i--) {
+        if (n.num[i] > '0') {
+            n.num[i]--; // Simply subtract 1 from the current digit
+            break;
+        } else {
+            // If the current digit is '0', we need to borrow from the previous digit
+            n.num[i] = '9';
+        }
+    }
+
+    // If the first digit becomes '0', we need to remove it (e.g., 1000 -> 999)
+    if (n.num[0] == '0' && n.num.size() > 1) {
+        n.num.erase(0, 1);
+    }
+
+    return n;
+
+}
+
+
+
+Big_int operator++(Big_int& n, int) {
+    Big_int temp = n;  // Save the current value
+
+    // Increment the number (you can reuse the logic from prefix increment)
+    ++n;  // Call the prefix increment to modify n
+
+    return temp;  // Return the original value
+}
+
+
+Big_int operator--(Big_int& n, int) {
+    Big_int temp = n;  // Save the current value
+
+    // Increment the number (you can reuse the logic from prefix increment)
+    --n;  // Call the prefix increment to modify n
+
+    return temp;  // Return the original value
 }
