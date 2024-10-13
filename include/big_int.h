@@ -34,6 +34,12 @@ class Big_int{
      // Postfix decrement operator (with int parameter to differentiate it)
     friend Big_int operator--(Big_int& n, int);
 
+    //Operator for Sum of two BigInt 
+    friend Big_int operator+(const Big_int& n1, const Big_int& n2);
+
+    // Operator for  difference of two BigInt
+    friend Big_int operator-(const Big_int& n1, const Big_int& n2);
+
 
 
 };
