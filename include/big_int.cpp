@@ -196,7 +196,7 @@ Big_int& operator--(Big_int& n) {
 Big_int operator++(Big_int& n, int) {
     Big_int temp = n;  // Save the current value
 
-    // Increment the number (you can reuse the logic from prefix increment)
+    // Increment 4the number (you can reuse the logic from prefix increment)
     ++n;  // Call the prefix increment to modify n
 
     return temp;  // Return the original value
@@ -210,4 +210,85 @@ Big_int operator--(Big_int& n, int) {
     --n;  // Call the prefix increment to modify n
 
     return temp;  // Return the original value
+}
+
+
+// Operator for  addition
+      Big_int operator+(const Big_int& n1, const Big_int& n2) {
+        std::string result = "";
+        std::string num1 = n1.num;
+        std::string num2 = n2.num;
+
+        // Ensure num1 is the larger number
+        if (num1.length() < num2.length()) {
+            std::swap(num1, num2);
+        }
+
+        std::reverse(num1.begin(), num1.end());
+        std::reverse(num2.begin(), num2.end());
+
+        int carry = 0;
+        for (size_t i = 0; i < num1.length(); ++i) {
+            int digit1 = num1[i] - '0';
+            int digit2 = (i < num2.length()) ? num2[i] - '0' : 0;
+
+            int sum = digit1 + digit2 + carry;
+            carry = sum / 10;
+            result += (sum % 10) + '0';
+        }
+
+        if (carry) {
+            result += carry + '0';
+        }
+
+        std::reverse(result.begin(), result.end());
+        return Big_int(result);
+    }
+
+    // For subtraction 
+
+    Big_int operator-(const Big_int& n1, const Big_int& n2) {
+    std::string result = "";
+    std::string num1 = n1.num;
+    std::string num2 = n2.num;
+
+    // Ensure num1 is the larger number
+    bool negative = false;
+    if (num1.length() < num2.length() || (num1.length() == num2.length() && num1 < num2)) {
+        std::swap(num1, num2);
+        negative = true;
+    }
+
+    std::reverse(num1.begin(), num1.end());
+    std::reverse(num2.begin(), num2.end());
+
+    int borrow = 0;
+    for (size_t i = 0; i < num1.length(); ++i) {
+        int digit1 = num1[i] - '0';
+        int digit2 = (i < num2.length()) ? num2[i] - '0' : 0;
+
+        int diff = digit1 - digit2 - borrow;
+        if (diff < 0) {
+            diff += 10;
+            borrow = 1;
+        } else {
+            borrow = 0;
+        }
+
+        result += diff + '0';
+    }
+
+    // Remove leading zeros
+    while (result.length() > 1 && result.back() == '0') {
+        result.pop_back();
+    }
+
+    std::reverse(result.begin(), result.end());
+
+    // Add negative sign if necessary
+    if (negative) {
+        result = "-" + result;
+    }
+
+    return Big_int(result);
 }
