@@ -26,6 +26,7 @@ std::string convert_floating_point(T num) {
 Big_int::Big_int(std::string input){
     if(is_valid_num(input)){
         this->num= input;
+        this->num.erase(0, input.find_first_not_of('0'));
     }else  
         throw std::runtime_error("Invalid number given");
     
@@ -34,20 +35,25 @@ Big_int::Big_int(std::string input){
 
 Big_int::Big_int(int num){
     this->num= std::to_string(num);
+    this->num.erase(0, this->num.find_first_not_of('0'));
     return;
 }
 
 Big_int::Big_int(long long int num){
     this->num= std::to_string(num);
+    this->num.erase(0, this->num.find_first_not_of('0'));
     return;
 }
 
 Big_int::Big_int(float num){
     this->num= convert_floating_point(num);
+    this->num.erase(0, this->num.find_first_not_of('0'));
 }
 
 Big_int::Big_int(double num){
     this->num= convert_floating_point(num);
+    this->num.erase(0, this->num.find_first_not_of('0'));
+    return;
 }
 
 
@@ -118,9 +124,13 @@ std::ostream& operator<<(std::ostream& stream, const Big_int& n) {
 std::istream& operator>>(std::istream& stream, Big_int& n) {
     std::string input;
     stream >> input;
-
+    input.erase(0, input.find_first_not_of('0'));
+    if (input.empty()) {
+        input = "0";
+    }
     // Validate the input string
     if (Big_int::is_valid_number(input)) {
+
         n.num = input;
     } else {
         stream.setstate(std::ios::failbit);  // Set failbit if invalid
@@ -292,3 +302,86 @@ Big_int operator--(Big_int& n, int) {
 
     return Big_int(result);
 }
+
+bool Big_int::is_strictly_maximum(std::string n1, std::string n2){
+    //checking if (n1 > n2)---
+    if(n1.size() != n2.size()) 
+        return n1.size() > n2.size();
+    else{
+
+        for(int i=0; i<n1.size(); i++){
+            int d1= (n1[i]-'0');
+            int d2= (n2[i]-'0');
+            if(d1 != d2) return (d1 > d2);// if digits are equal then continue
+
+        }
+    }
+
+    return false;//all digits are equal so not strictly maximum.
+}
+
+
+bool Big_int::is_loosely_maximum(std::string n1, std::string n2){
+    
+    //checking if (n1 >= n2)---
+    if(n1.size() != n2.size()) 
+        return n1.size() > n2.size();
+    else{
+
+        for(int i=0; i<n1.size(); i++){
+            int d1= (n1[i]-'0');
+            int d2= (n2[i]-'0');
+            if(d1 != d2) return (d1 > d2);// if digits are equal then continue
+
+        }
+    }
+
+    return true;//all digits are equal so loosely maximum.
+}
+
+bool Big_int::is_strictly_minimum(std::string n1, std::string n2){
+
+    if(n1.size() != n2.size())
+        return n1.size() < n2.size();
+    else{
+
+        for(int i=0; i<n1.size(); i++){
+             int d1= (n1[i]-'0');
+            int d2= (n2[i]-'0');
+            if(d1 != d2) return (d1 < d2);// if digits are equal then continue
+        }
+    }
+
+    return false;
+}
+
+bool Big_int::is_loosely_minimum(std::string n1, std::string n2){
+    
+    //checking if (n1 <= n2)---
+    if(n1.size() != n2.size()) 
+        return n1.size() < n2.size();
+    else{
+
+        for(int i=0; i<n1.size(); i++){
+            int d1= (n1[i]-'0');
+            int d2= (n2[i]-'0');
+            if(d1 != d2) return (d1 < d2);// if digits are equal then continue
+
+        }
+    }
+
+    return true;//all digits are equal so loosely maximum.
+}
+
+bool Big_int::is_equal(std::string n1, std::string n2){
+    if(n1.size() != n2.size()) return false;
+
+    for(int i=0; i<n1.size(); i++){
+        int d1= n1[i]-'0';
+        int d2= n2[i]-'0';
+        if(d1 != d2) return false;
+    }
+
+    return true;
+}
+

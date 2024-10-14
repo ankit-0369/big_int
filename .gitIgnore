@@ -15,6 +15,7 @@
 # Precompiled Headers
 *.gch
 *.pch
+*.cph
 
 # Compiled Dynamic libraries
 *.so
