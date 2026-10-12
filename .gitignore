@@ -2,6 +2,15 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=cmake,c++
 
 ### C++ ###
+
+# build output
+build/
+build-*/
+cmake-build-*/
+
+# editor/tool caches
+.cache/
+
 # Prerequisites
 *.d
 .vscode
